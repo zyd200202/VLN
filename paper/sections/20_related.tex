@@ -1,0 +1,58 @@
+\FloatBarrier
+\section{Related Work}
+
+\paragraph{Zero-shot object navigation with foundation models.}
+Object-goal navigation \citep{batra2020objectnav} and vision-and-language
+navigation \citep{anderson2018r2r,krantz2020vlnce,khanna2024goat} are
+typically learned with reinforcement or imitation \citep{wijmans2020ddppo,
+ramrakhya2023pirlnav}, which generalizes poorly to unseen distributions.
+Recent zero-shot systems instead build on foundation models. One family
+guides frontier exploration with language priors
+\citep{chaplot2020semexp,zhou2023esc,yu2023l3mvn}; another fuses
+open-vocabulary detectors into a value map for goal reasoning
+\citep{yokoyama2024vlfm,gadre2023cow}; a third lets a VLM read a panoramic
+observation and directly emit a heading \citep{zhou2024navgpt,
+long2024instructnav}. We build on InstructNav \citep{long2024instructnav}, a
+representative agent that couples a local VLM, an open-vocabulary detector
+\citep{wu2024glee}, and a value-map frontier explorer. These works assume
+clean observations; we instead study, on the same backbone, \emph{where}
+such an agent breaks when its input is degraded.
+
+\paragraph{Robustness of embodied agents to visual corruption.}
+RobustNav \citep{chattopadhyay2021robustnav} first benchmarked navigation
+under visual and dynamics corruptions and reported large drops, motivating
+task-oriented data augmentation \citep{maksymets2021thda} and domain
+adaptation. A common alternative is to restore the input before it reaches
+the policy via low-light enhancement \citep{guo2020zerodce,wu2023uretinex}
+or denoising. These approaches operate at the pixel layer and aim to
+recover clean appearance. We show that, for a VLM-driven navigator,
+restoring appearance does not restore navigation: an $8.4$\,dB PSNR gain
+leaves SR within seed noise, and a per-frame oracle that always picks the
+better-looking view does no better. Our benchmark is designed to expose
+this gap, with a paired protocol and severity sweeps in the style of
+corruption robustness benchmarks \citep{hendrycks2019benchmarking}.
+
+\paragraph{Uncertainty, commitment, and executive control.}
+Knowing when a model should not be trusted is central to safe autonomy
+\citep{abdar2021uncertainty}; blind image-quality assessment estimates
+degradation without a reference \citep{su2020blindly} and active perception
+decides where to look in order to reduce uncertainty
+\citep{ramakrishnan2021exploration}. A complementary direction studies the
+\emph{executive} layer of zero-shot ObjectNav: \emph{when} to commit, stop,
+and recover from a bad commitment. Our diagnosis is consistent with this
+literature but localizes the problem more sharply: we use a training-free
+per-step reliability estimate purely as a \emph{measurement instrument},
+and we evaluate deployable commitment-timing and temporal/multi-view
+aggregation interventions head-on, each of which leaves success unchanged
+or lowers it on a frozen, clean-trained backbone (Tab.~\ref{tab:sweep}).
+
+\paragraph{Evaluation of stochastic agents.}
+VLM-driven agents are non-deterministic, and single-run point estimates of
+embodied performance are known to be unreliable
+\citep{anderson2018evaluation}. We therefore report multi-seed pooled
+success, paired per-episode differences, McNemar's exact test, and
+bootstrap confidence intervals at $N{=}300$, and treat small-sample point
+estimates only as pilot runs; the Experiments section quantifies how badly
+small samples mislead in this setting. Figure~\ref{fig:teaser}(e)
+visualizes the resulting coverage map of our paper against the families
+above.

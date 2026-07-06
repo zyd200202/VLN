@@ -1,0 +1,26 @@
+\begin{table}[t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{2.3pt}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+Corruption & SR$_{\text{B0}}$ & SR$_{\text{RES}}$ & $\Delta$SR & 95\% CI($\Delta$SR) & $p$ (McN.) \\
+\midrule
+low-light & $0.387$ & $0.433$ & $+0.047$ & $[-0.027,+0.127]$ & $0.311$ \\
+motion-blur & $0.367$ & $0.327$ & $-0.040$ & $[-0.133,+0.047]$ & $0.461$ \\
+fog & $0.407$ & $0.433$ & $+0.027$ & $[-0.053,+0.107]$ & $0.627$ \\
+gauss.\ noise & $0.253$ & $0.253$ & $+0.000$ & $[-0.073,+0.073]$ & $1.000$ \\
+\bottomrule
+\end{tabular}
+\caption{\textbf{Cross-corruption paired benchmark ($N{=}150$, seed~$0$).}
+InstructNav\,$+$\,Qwen2-VL-7B on HM3D~val, held bit-identical across the
+four corruption channels (severity~$4$); the only comparison is blanket
+RGB restoration (RES) against the frozen baseline (B0), the intervention
+a reviewer would first ask about ($\Delta$SPL is similarly null on every
+cell, $|\Delta\text{SPL}|{\leq}0.03$). All four cells stay non-significant at
+$\alpha{=}0.05$, and the sign of $\Delta$SR flips between motion-blur
+($-$) and the other three ($+$)---matching the small-sample sign-flip
+diagnosis in \emph{Sample Size and Scope}. The commitment-on-degraded-input
+fingerprint is thus not tied to any single corruption channel.}
+\label{tab:cross-corruption}
+\end{table}

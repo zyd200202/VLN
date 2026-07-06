@@ -1,0 +1,34 @@
+\section{Conclusion}
+
+We asked why VLM-driven navigation agents fail under visual degradation and
+showed that the common remedy---restoring the input---is aimed at the wrong
+layer: the agent keeps acting and keeps seeing, but commits irreversibly on
+unreliable frames, leaving a 26-point reach-to-success gap that no deployable
+test-time intervention closes. The sweep, its oracle upper bound, and the
+cross-corruption replication together locate this loss at the commitment
+interface itself rather than in any specific corruption channel or
+module.
+The remaining headroom is accessible only by changing what the agent was
+\emph{trained} on: degradation-aware training and adaptation that keep
+perception and commitment discriminative under corruption, and, where
+multi-modal sensing is available, detectors that have \emph{learned} to fuse
+RGB with depth under degraded input. A first pilot in this direction---a
+$10^{6}$-parameter feature adapter trained on scene-disjoint
+(clean,\,degraded) pairs---already matches the best deployable test-time
+arm while measurably re-aligning degraded features
+(Appendix~\ref{app:road1}); the effect is not yet statistically
+resolvable, but it is the qualitative direction the diagnosis predicts.
+We release the benchmark, paired protocol, and all negative results as an
+instrument for measuring such retrained agents under the same paired,
+adequately powered conditions.
+
+\paragraph{Limitations.}
+Our diagnosis is bounded by its substrate: one simulator (Habitat HM3D),
+one task (ObjectNav), one open-weight VLM backbone (Qwen2-VL-7B), and
+synthetic ImageNet-C-style corruptions; real sensor degradation may add artefacts (rolling shutter,
+auto-exposure hunting) we do not model. The intervention sweep covers six
+causal families but cannot exhaust the design space of test-time fixes, so
+our negative results bound the families we probed, not every conceivable
+patch. Finally, the reliability estimator is an analysis instrument
+calibrated on our probe set; we do not claim it transfers unchanged to
+other embodiments.

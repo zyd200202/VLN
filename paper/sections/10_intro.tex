@@ -1,0 +1,98 @@
+\section{Introduction}
+
+Object-goal navigation requires an agent to locate an instance of a target
+category in an unknown environment, perceiving, deciding, and moving in a
+closed loop \citep{batra2020objectnav}. Recent zero-shot navigators delegate
+the perceptual part of this loop to large vision--language models (VLMs): a
+panoramic observation is described in language, a heading is selected, and a
+value map that scores candidate directions is updated at every step
+\citep{long2024instructnav,yokoyama2024vlfm,zhou2023esc}. These methods perform
+well on standard benchmarks, where the input is clean. In real deployments,
+however, the camera rarely delivers clean frames: corridors are dimly lit,
+lenses fog up, and motion blurs the image. Under these conditions, the same
+agents lose much of their success rate: in our measurements, low light alone
+halves the success rate of a representative zero-shot navigator.
+
+A natural way to address this problem is to treat it as an image-quality
+issue and insert a restoration front-end, such as low-light enhancement or
+denoising, between the camera and the policy \citep{guo2020zerodce,
+wu2023uretinex}. The underlying assumption is that once the corrupted frame is
+made to look clean again, the downstream navigator will behave as if the
+degradation were absent. Whether this assumption holds, however, has not been
+examined directly for VLM-driven navigators. We find that it does not, and we
+use a controlled diagnosis to show \emph{why}. This is a
+diagnosis-and-benchmark paper: our contribution is the measurement
+instrument and the resulting map of what does not work, not a new agent.
+
+\paragraph{A degradation-robust ObjectNav benchmark.}
+We first build an evaluation substrate for this question: a degradation-robust
+ObjectNav benchmark on a representative zero-shot backbone
+(InstructNav~\citep{long2024instructnav}) in Habitat--Matterport~3D
+\citep{ramakrishnan2021hm3d,yadav2023hm3dsem}. It applies structure-preserving
+corruptions (low light, haze, motion blur, sensor noise) across severities,
+fixes the same episodes across methods through a same-seed same-episode paired
+protocol that supports McNemar tests, and equips the agent with a training-free
+blind per-step reliability estimator. Every quantity below is measured on the
+unmodified agent at the $N{=}300$ main-split scale, so the diagnosis does not
+depend on any proposed fix. Sample size matters at this scale: between
+$N{=}40$ and $N{=}150$ the measured per-condition restoration effect
+\emph{changes sign}.
+
+\paragraph{Degradation breaks commitments, not perception.}
+Three observations emerge (Figure~\ref{fig:motivation}). First, degradation
+does reduce success: under low light the success rate falls by roughly half.
+Second, the bottleneck is not appearance: a restoration step that raises image
+fidelity by $8.4$\,dB PSNR leaves the success rate within seed noise, and a
+per-frame oracle that picks the best of the degraded and restored views does no
+better than blanket restoration. Third, degradation does not change
+\emph{whether} the agent acts. We call the moment the agent irreversibly
+declares the target found---the detector's \texttt{found} flag flipping on a
+single frame---a \emph{commitment}; the commit rate (${\sim}93\%$) and the
+pure-exploration-failure rate (${\sim}6\%$) are essentially unchanged from
+clean, but degradation corrupts the \emph{quality} of these irreversible
+commitments. Decomposing the outcome as
+$\text{SR}=\text{reachability}-\text{commit/stop loss}$, the agent walks within
+one metre of the goal in $62\%$ of episodes yet succeeds in only $36\%$; it
+commits at a frame reliability of $0.39$ versus $0.95$ on clean input, only
+$40\%$ of its commitments lead to success, and once committed it stays locked
+for ${\sim}12$ steps. The behaviour resembles a person who, catching a brief glimpse of a
+doorway, strides toward it and keeps going long after it proves wrong: the agent
+does not fail because it cannot see; it fails because it makes an irreversible
+decision on a single unreliable frame and cannot revoke it.
+
+\paragraph{Negative results that localize the bottleneck.}
+The diagnosis predicts that perception-layer fixes should not help, and we
+confirm this at $N{=}300$: blanket restoration moves SR by only $+0.04$
+(McNemar $p{=}0.18$), and even a non-deployable per-frame appearance
+oracle---an upper bound on any test-time arbitration over appearance---caps
+at $+0.057$. A broader sweep across six causal families (appearance,
+where-to-go, commit timing, forced commitment, temporal and multi-view
+aggregation, and a depth-based cross-modal verifier) finds that every
+\emph{deployable} family---one that consults no privileged information at
+test time---either lands at a non-significant ${\sim}0$ or
+\emph{significantly hurts} success (Tab.~\ref{tab:sweep}), indicating an
+irreducible commitment error that no single test-time channel can recover.
+
+\paragraph{Contributions.}
+\begin{itemize}
+\item \textbf{Benchmark.} A degradation-robust ObjectNav benchmark on a
+  zero-shot VLM backbone: structure-preserving corruptions across
+  severities, a same-seed paired protocol with McNemar exact tests and
+  bootstrap CIs, and a training-free blind per-step reliability estimator.
+\item \textbf{Diagnosis.} A method-independent mechanism analysis at
+  $N{=}300$ that reframes degradation-induced failure as irreversible,
+  low-reliability commitments, quantified by a reachability/commit-loss
+  decomposition.
+\item \textbf{Negative results.} A sweep of six causal intervention
+  families in which every deployable family caps at zero or backfires
+  ($p{<}0.05$), while the non-deployable per-frame appearance oracle caps
+  at $+0.057$; we further show that per-condition restoration effects can
+  sign-flip between $N{=}40$ and $N{=}150$, so under-powered evaluations
+  can conclude the wrong direction.
+\item \textbf{Replication.} A cross-corruption replication on the same
+  InstructNav+Qwen2-VL-7B pipeline (low-light, motion-blur, fog,
+  Gaussian noise) that reproduces the same non-significant fingerprint,
+  with $|\Delta\text{SR}|{\leq}0.05$ and sign-flipping across cells,
+  establishing that the effect is not tied to any specific corruption
+  channel. We release all settings, seeds, and negative results.
+\end{itemize}

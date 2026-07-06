@@ -1,0 +1,27 @@
+\begin{abstract}
+Zero-shot object-goal navigation agents driven by vision--language models lose
+much of their success rate once the camera input is corrupted by low light,
+haze, or motion, and the default remedy is to restore the image before it
+reaches the policy. Through a controlled study on InstructNav in
+Habitat--Matterport~3D ObjectNav, with a same-seed paired protocol at
+$N{=}300$ and a blind per-step reliability estimator, we show that this
+remedy targets the wrong layer. Degradation does not stop the agent from
+acting; it corrupts the \emph{quality} of an irreversible commitment: the
+agent still reaches within one metre of the goal in $62\%$ of episodes yet
+succeeds in only $36\%$, and restoration that visibly repairs the image
+moves success by a non-significant $+0.04$. A sweep over six causal families
+of test-time interventions---pixel restoration with a per-frame appearance
+upper bound, reliability-gated reweighting, commit-timing revocation, forced
+commitment, and temporal/multi-view aggregation---finds that every deployable
+family lands at ${\sim}0$ or \emph{significantly hurts} success, evidence for
+an irreducible commitment error that no test-time channel recovers. The
+fingerprint survives a cross-corruption replication (low-light,
+motion-blur, fog, Gaussian noise) on the same InstructNav+Qwen2-VL-7B
+pipeline, and we document that per-condition restoration effects can flip
+sign between $N{=}40$ and $N{=}150$, so under-powered evaluations can
+conclude the wrong direction.
+These results point the field away from test-time patches on frozen,
+clean-trained agents, toward degradation-aware training and learned
+multi-modal sensing. We release the benchmark, protocol, and all negative
+results.
+\end{abstract}

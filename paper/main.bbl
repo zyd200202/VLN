@@ -1,0 +1,200 @@
+\begin{thebibliography}{26}
+\providecommand{\natexlab}[1]{#1}
+
+\bibitem[{Abdar et~al.(2021)Abdar, Pourpanah, Hussain, Rezazadegan, Liu,
+  Ghavamzadeh, Fieguth, Cao, Khosravi, Acharya, Makarenkov, and
+  Nahavandi}]{abdar2021uncertainty}
+Abdar, M.; Pourpanah, F.; Hussain, S.; Rezazadegan, D.; Liu, L.; Ghavamzadeh,
+  M.; Fieguth, P.; Cao, X.; Khosravi, A.; Acharya, U.~R.; Makarenkov, V.; and
+  Nahavandi, S. 2021.
+\newblock A review of uncertainty quantification in deep learning: Techniques,
+  applications and challenges.
+\newblock \emph{Information Fusion}, 76: 243--297.
+
+\bibitem[{Anderson et~al.(2018{\natexlab{a}})Anderson, Chang, Chaplot,
+  Dosovitskiy, Gupta, Koltun, Kosecka, Malik, Mottaghi, Savva, and
+  Zamir}]{anderson2018evaluation}
+Anderson, P.; Chang, A.; Chaplot, D.~S.; Dosovitskiy, A.; Gupta, S.; Koltun,
+  V.; Kosecka, J.; Malik, J.; Mottaghi, R.; Savva, M.; and Zamir, A.~R.
+  2018{\natexlab{a}}.
+\newblock On Evaluation of Embodied Navigation Agents.
+\newblock \emph{arXiv preprint arXiv:1807.06757}.
+
+\bibitem[{Anderson et~al.(2018{\natexlab{b}})Anderson, Wu, Teney
+  et~al.}]{anderson2018r2r}
+Anderson, P.; Wu, Q.; Teney, D.; et~al. 2018{\natexlab{b}}.
+\newblock Vision-and-Language Navigation: Interpreting Visually-Grounded
+  Navigation Instructions in Real Environments.
+\newblock In \emph{CVPR}.
+
+\bibitem[{Batra et~al.(2020)Batra, Gokaslan, Kembhavi, Maksymets, Mottaghi,
+  Savva, Toshev, and Wijmans}]{batra2020objectnav}
+Batra, D.; Gokaslan, A.; Kembhavi, A.; Maksymets, O.; Mottaghi, R.; Savva, M.;
+  Toshev, A.; and Wijmans, E. 2020.
+\newblock {ObjectNav} Revisited: On Evaluation of Embodied Agents Navigating to
+  Objects.
+\newblock \emph{arXiv preprint arXiv:2006.13171}.
+
+\bibitem[{Chaplot et~al.(2020)Chaplot, Gandhi, Gupta, and
+  Salakhutdinov}]{chaplot2020semexp}
+Chaplot, D.~S.; Gandhi, D.; Gupta, A.; and Salakhutdinov, R. 2020.
+\newblock Object Goal Navigation using Goal-Oriented Semantic Exploration.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}.
+
+\bibitem[{Chattopadhyay et~al.(2021)Chattopadhyay, Hoffman, Mottaghi, and
+  Kembhavi}]{chattopadhyay2021robustnav}
+Chattopadhyay, P.; Hoffman, J.; Mottaghi, R.; and Kembhavi, A. 2021.
+\newblock {RobustNav}: Towards Benchmarking Robustness in Embodied Navigation.
+\newblock In \emph{IEEE/CVF International Conference on Computer Vision
+  (ICCV)}.
+
+\bibitem[{Gadre et~al.(2023)Gadre, Wortsman, Ilharco, Schmidt, and
+  Song}]{gadre2023cow}
+Gadre, S.~Y.; Wortsman, M.; Ilharco, G.; Schmidt, L.; and Song, S. 2023.
+\newblock {CoWs} on Pasture: Baselines and Benchmarks for Language-Driven
+  Zero-Shot Object Navigation.
+\newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition (CVPR)}.
+
+\bibitem[{Guo et~al.(2020)Guo, Li, Guo, Loy, Hou, Kwong, and
+  Cong}]{guo2020zerodce}
+Guo, C.; Li, C.; Guo, J.; Loy, C.~C.; Hou, J.; Kwong, S.; and Cong, R. 2020.
+\newblock Zero-Reference Deep Curve Estimation for Low-Light Image Enhancement.
+\newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition (CVPR)}.
+
+\bibitem[{Hendrycks and Dietterich(2019)}]{hendrycks2019benchmarking}
+Hendrycks, D.; and Dietterich, T. 2019.
+\newblock Benchmarking Neural Network Robustness to Common Corruptions and
+  Perturbations.
+\newblock \emph{International Conference on Learning Representations (ICLR)}.
+
+\bibitem[{Khanna et~al.(2024)Khanna, Ramrakhya, Chang et~al.}]{khanna2024goat}
+Khanna, M.; Ramrakhya, R.; Chang, M.; et~al. 2024.
+\newblock GOAT-Bench: A Benchmark for Multi-Modal Lifelong Navigation.
+\newblock In \emph{CVPR}.
+
+\bibitem[{Krantz et~al.(2020)Krantz, Wijmans, Majumdar, Batra, and
+  Lee}]{krantz2020vlnce}
+Krantz, J.; Wijmans, E.; Majumdar, A.; Batra, D.; and Lee, S. 2020.
+\newblock Beyond the Nav-Graph: Vision-and-Language Navigation in Continuous
+  Environments.
+\newblock In \emph{ECCV}.
+
+\bibitem[{Long et~al.(2024)Long, Cai, Wang, Zhan, and
+  Dong}]{long2024instructnav}
+Long, Y.; Cai, W.; Wang, H.; Zhan, G.; and Dong, H. 2024.
+\newblock {InstructNav}: Zero-shot System for Generic Instruction Navigation in
+  Unexplored Environment.
+\newblock In \emph{Conference on Robot Learning (CoRL)}.
+
+\bibitem[{Maksymets et~al.(2021)Maksymets, Cartillier, Gokaslan
+  et~al.}]{maksymets2021thda}
+Maksymets, O.; Cartillier, V.; Gokaslan, A.; et~al. 2021.
+\newblock THDA: Treasure Hunt Data Augmentation for Semantic Navigation.
+\newblock In \emph{ICCV}.
+
+\bibitem[{Ramakrishnan et~al.(2021)Ramakrishnan, Gokaslan, Wijmans, Maksymets,
+  Clegg, Turner, Undersander, Galuba, Westbury, Chang, Savva, Zhao, and
+  Batra}]{ramakrishnan2021hm3d}
+Ramakrishnan, S.~K.; Gokaslan, A.; Wijmans, E.; Maksymets, O.; Clegg, A.;
+  Turner, J.; Undersander, E.; Galuba, W.; Westbury, A.; Chang, A.~X.; Savva,
+  M.; Zhao, Y.; and Batra, D. 2021.
+\newblock Habitat-Matterport 3D Dataset ({HM3D}): 1000 Large-scale 3D
+  Environments for Embodied AI.
+\newblock In \emph{Advances in Neural Information Processing Systems (NeurIPS)
+  Datasets and Benchmarks}.
+
+\bibitem[{Ramakrishnan, Jayaraman, and
+  Grauman(2021)}]{ramakrishnan2021exploration}
+Ramakrishnan, S.~K.; Jayaraman, D.; and Grauman, K. 2021.
+\newblock An Exploration of Embodied Visual Exploration.
+\newblock \emph{International Journal of Computer Vision (IJCV)}, 129(5):
+  1616--1649.
+
+\bibitem[{Ramrakhya et~al.(2023)Ramrakhya, Batra, Wijmans, and
+  Das}]{ramrakhya2023pirlnav}
+Ramrakhya, R.; Batra, D.; Wijmans, E.; and Das, A. 2023.
+\newblock PIRLNav: Pretraining with Imitation and RL Finetuning for ObjectNav.
+\newblock In \emph{CVPR}.
+
+\bibitem[{Su et~al.(2020)Su, Yan, Zhu, Zhang, Ge, Sun, and
+  Zhang}]{su2020blindly}
+Su, S.; Yan, Q.; Zhu, Y.; Zhang, C.; Ge, X.; Sun, J.; and Zhang, Y. 2020.
+\newblock Blindly Assess Image Quality in the Wild Guided by a Self-Adaptive
+  Hyper Network.
+\newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition (CVPR)}.
+
+\bibitem[{Wang et~al.(2024)Wang, Bai, Tan, Wang, Fan, Bai, Chen, Liu, Wang, Ge,
+  Fan, Dang, Du, Ren, Men, Liu, Zhou, Zhou, and Lin}]{wang2024qwen2vl}
+Wang, P.; Bai, S.; Tan, S.; Wang, S.; Fan, Z.; Bai, J.; Chen, K.; Liu, X.;
+  Wang, J.; Ge, W.; Fan, Y.; Dang, K.; Du, M.; Ren, X.; Men, R.; Liu, D.; Zhou,
+  C.; Zhou, J.; and Lin, J. 2024.
+\newblock {Qwen2-VL}: Enhancing Vision-Language Model's Perception of the World
+  at Any Resolution.
+\newblock \emph{arXiv preprint arXiv:2409.12191}.
+
+\bibitem[{Wijmans et~al.(2020)Wijmans, Kadian, Morcos
+  et~al.}]{wijmans2020ddppo}
+Wijmans, E.; Kadian, A.; Morcos, A.; et~al. 2020.
+\newblock DD-PPO: Learning Near-Perfect PointGoal Navigators from 2.5 Billion
+  Frames.
+\newblock In \emph{ICLR}.
+
+\bibitem[{Wu et~al.(2024)Wu, Jiang, Liu, Yuan, Bai, and Bai}]{wu2024glee}
+Wu, J.; Jiang, Y.; Liu, Q.; Yuan, Z.; Bai, X.; and Bai, S. 2024.
+\newblock {GLEE}: General Object Foundation Model for Images and Videos at
+  Scale.
+\newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition (CVPR)}.
+
+\bibitem[{Wu et~al.(2022)Wu, Weng, Zhang, Wang, Yang, and
+  Jiang}]{wu2023uretinex}
+Wu, W.; Weng, J.; Zhang, P.; Wang, X.; Yang, W.; and Jiang, J. 2022.
+\newblock {URetinex-Net}: Retinex-based Deep Unfolding Network for Low-light
+  Image Enhancement.
+\newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition (CVPR)}.
+
+\bibitem[{Yadav et~al.(2023)Yadav, Ramrakhya, Ramakrishnan, Gervet, Turner,
+  Gokaslan, Maestre, Chang, Batra, Savva, Clegg, and
+  Chaplot}]{yadav2023hm3dsem}
+Yadav, K.; Ramrakhya, R.; Ramakrishnan, S.~K.; Gervet, T.; Turner, J.;
+  Gokaslan, A.; Maestre, N.; Chang, A.~X.; Batra, D.; Savva, M.; Clegg, A.~W.;
+  and Chaplot, D.~S. 2023.
+\newblock Habitat-Matterport 3D Semantics Dataset.
+\newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition (CVPR)}.
+
+\bibitem[{Yokoyama et~al.(2024)Yokoyama, Ha, Batra, Wang, and
+  Bucher}]{yokoyama2024vlfm}
+Yokoyama, N.; Ha, S.; Batra, D.; Wang, J.; and Bucher, B. 2024.
+\newblock {VLFM}: Vision-Language Frontier Maps for Zero-Shot Semantic
+  Navigation.
+\newblock In \emph{IEEE International Conference on Robotics and Automation
+  (ICRA)}.
+
+\bibitem[{Yu, Kasaei, and Cao(2023)}]{yu2023l3mvn}
+Yu, B.; Kasaei, H.; and Cao, M. 2023.
+\newblock {L3MVN}: Leveraging Large Language Models for Visual Target
+  Navigation.
+\newblock In \emph{IEEE/RSJ International Conference on Intelligent Robots and
+  Systems (IROS)}.
+
+\bibitem[{Zhou, Hong, and Wu(2024)}]{zhou2024navgpt}
+Zhou, G.; Hong, Y.; and Wu, Q. 2024.
+\newblock {NavGPT}: Explicit Reasoning in Vision-and-Language Navigation with
+  Large Language Models.
+\newblock In \emph{AAAI Conference on Artificial Intelligence}.
+
+\bibitem[{Zhou et~al.(2023)Zhou, Zheng, Pryor, Shen, Jin, Getoor, and
+  Wang}]{zhou2023esc}
+Zhou, K.; Zheng, K.; Pryor, C.; Shen, Y.; Jin, H.; Getoor, L.; and Wang, X.~E.
+  2023.
+\newblock {ESC}: Exploration with Soft Commonsense Constraints for Zero-shot
+  Object Navigation.
+\newblock In \emph{International Conference on Machine Learning (ICML)}.
+
+\end{thebibliography}

@@ -1,0 +1,35 @@
+# Python bytecode & caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# LaTeX build artefacts
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.blg
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Local runs (never commit fresh eval outputs)
+runs/
+_runs/
+tmp/
+
+# Large model weights (check into checkpoints/ explicitly if needed)
+*.pt
+*.bin
+*.safetensors
+
+# Explicit whitelist: keep the shipped adapter
+!checkpoints/adapter_low_light_s4.pth

@@ -1,0 +1,13 @@
+success,spl,distance_to_goal,object_goal
+1.0,0.24330908509199187,0.23054194450378418,Find the <chair>.
+0.0,0.0,3.681532621383667,Find the <television_set>.
+0.0,0.0,1.8073557615280151,Find the <chair>.
+1.0,0.1611007500435234,0.02426423877477646,Find the <toilet>.
+0.0,0.0,3.133383274078369,Find the <bed>.
+0.0,0.0,1.6209797859191895,Find the <sofa>.
+0.0,0.0,0.10078147053718567,Find the <sofa>.
+0.0,0.0,6.387543678283691,Find the <toilet>.
+0.0,0.0,0.4338011145591736,Find the <chair>.
+0.0,0.0,13.85286808013916,Find the <sofa>.
+0.0,0.0,2.4417927265167236,Find the <toilet>.
+0.0,0.0,2.6739449501037598,Find the <potted_plant>.

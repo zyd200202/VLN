@@ -1,0 +1,22 @@
+\begin{table*}[t]
+\centering
+\small
+\setlength{\tabcolsep}{3.4pt}
+\begin{tabular}{@{}lllcccccccc@{}}
+\toprule
+Family & Arm & What it does & SR$_{\text{B0}}$ & SR$_{\text{arm}}$ & $\Delta$SR & $\Delta$SPL & 95\% CI($\Delta$SR) & $p$ (McN.) & $N$ \\
+\midrule
+Appearance & RES & blanket restoration front-end & $0.370$ & $0.410$ & $+0.040$ & $+0.032$ & $[-0.013,+0.093]$ & $0.182$ & $300$ \\
+Appearance UB & OracleGate$^{\ddagger}$ & per-frame best-of-two view & $0.370$ & $0.427$ & $\mathbf{+0.057}$ & $+0.025$ & $[+0.003,+0.110]$ & $\mathbf{0.043}$ & $300$ \\
+Where-to-go & M1g & $r$-gated value-map reweight & $0.370$ & $0.410$ & $+0.040$ & $+0.012$ & $[-0.017,+0.097]$ & $0.201$ & $300$ \\
+Commit timing & REVOKE & revoke stalled commitments & $0.380$ & $0.260$ & $\mathbf{-0.120}$ & $-0.020$ & $[-0.207,-0.040]$ & $\mathbf{0.006}$ & $150$ \\
+Forced commit & CRV & close-range recall verifier & $0.380$ & $0.400$ & $+0.020$ & $+0.021$ & $[-0.053,+0.093]$ & $0.728$ & $150$ \\
+Temporal & MUAP & hold-frames + re-observe & $0.380$ & $0.260$ & $\mathbf{-0.120}$ & $-0.039$ & $[-0.220,-0.020]$ & $\mathbf{0.022}$ & $150$ \\
+Temporal & ROUTER & per-frame degradation router & $0.380$ & $0.393$ & $+0.013$ & $+0.031$ & $[-0.073,+0.100]$ & $0.875$ & $150$ \\
+Multi-view & FUSE & multi-view identity fusion & $0.380$ & $0.367$ & $-0.013$ & $+0.032$ & $[-0.100,+0.073]$ & $0.878$ & $150$ \\
+Multimodal probe & DXCV$^{\flat}$ & depth cross-modal veto & $0.380$ & $0.207$ & $\mathbf{-0.173}$ & $-0.057$ & $[-0.260,-0.087]$ & $\mathbf{{<}0.001}$ & $150$ \\
+\bottomrule
+\end{tabular}
+\caption{\textbf{Intervention sweep across six causal families.} Paired protocol on low-light sev~$4$, seed~$0$, val split. The three top rows are scored at the $N{=}300$ main split; the six lower rows share a common $N{=}150$ subset with a single shared baseline, so all comparisons are on exactly the same episodes. Bold entries are significant at $p{<}0.05$ (McNemar exact). Every \emph{deployable} family either lands at a non-significant ${\sim}0$ or \emph{significantly hurts} success (REVOKE, MUAP, DXCV lower paired SR by $0.12$--$0.17$); the only arm clearing $p{<}0.05$ with a \emph{positive} $\Delta$SR is the non-deployable per-frame appearance upper bound, which caps at $+0.057$. Confidence intervals are $B{=}5000$ bootstrap over paired episode differences. $^{\ddagger}$non-deployable oracle. $^{\flat}$train-free depth-geometry cross-modal veto.}
+\label{tab:sweep}
+\end{table*}

@@ -1,0 +1,94 @@
+\documentclass[letterpaper]{article}
+\usepackage[submission]{aaai25}
+\usepackage{times}
+\usepackage{helvet}
+\usepackage{courier}
+\usepackage[hyphens]{url}
+\usepackage{graphicx}
+\urlstyle{rm}
+\def\UrlFont{\rm}
+\usepackage{natbib}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{microtype}
+\usepackage{placeins}   % \FloatBarrier
+\usepackage{float}      % [H] placement option
+\frenchspacing
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\setlength{\pdfpagewidth}{8.5in}
+\setlength{\pdfpageheight}{11in}
+
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.85}
+\renewcommand{\dbltopfraction}{0.95}
+\renewcommand{\dblfloatpagefraction}{0.85}
+
+\pdfinfo{
+/TemplateVersion (2025.1)
+}
+
+\setcounter{secnumdepth}{0}
+
+\title{Restoring the Image Does Not Restore Navigation:\\ Diagnosing Degradation-Robust Object-Goal Navigation as a Commitment Problem}
+
+\author{Anonymous submission}
+\affiliations{}
+
+\makeatletter
+\let\DRPN@old@maketitle\@maketitle
+\def\@maketitle{%
+  \DRPN@old@maketitle
+  \par\vspace{0.6em}
+  \begin{minipage}{\textwidth}\centering
+    \includegraphics[width=\textwidth]{figures/fig_teaser.pdf}\\[2pt]
+    \captionof{figure}{\textbf{Restoring the image does not restore
+    navigation.} \textbf{(a)} Blanket restoration recovers image quality
+    (PSNR $7.4{\to}15.9$\,dB; blind reliability at the committing frame
+    $0.39{\to}0.89$). \textbf{(b)} The same restoration moves success by only
+    $+0.04$, indistinguishable from no intervention ($N{=}300$ paired,
+    McNemar $p{=}0.182$). \textbf{(c)} \emph{Background:} one representative
+    HM3D ObjectNav episode under low-light severity~$4$; bright path traces
+    the real rendered trajectory. \emph{Annotations:} aggregate statistics
+    on the $N{=}300$ main split---the agent reaches within one metre of the
+    goal in $62\%$ of episodes but succeeds in only $37\%$, a $26$-point
+    reach-to-success gap that no perception-side intervention closes.
+    \textbf{(d)} The full nine-arm intervention sweep (companion to
+    Tab.~\ref{tab:sweep}): markers are paired $\Delta$SR vs.\ the frozen
+    baseline, bars are bootstrap $95\%$ CIs, $*$ marks McNemar
+    $p{<}0.05$. Every deployable arm is either indistinguishable from
+    zero or \emph{significantly negative}; the only significant positive
+    is the non-deployable per-frame appearance oracle, capped at
+    $+0.057$.}
+    \label{fig:teaser}
+  \end{minipage}\par\vspace{0.6em}
+}
+\makeatother
+
+\begin{document}
+\maketitle
+
+\input{sections/00_abstract}
+\input{sections/10_intro}
+\input{sections/20_related}
+\input{sections/30_motivation}
+\input{sections/40_method}
+\input{sections/50_experiments}
+\input{sections/60_conclusion}
+
+\bibliography{references}
+
+\clearpage
+\appendix
+\setcounter{section}{0}
+\renewcommand{\thesection}{\Alph{section}}
+\setcounter{secnumdepth}{1}
+\input{sections/A0_appendix}
+
+\end{document}
