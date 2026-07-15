@@ -3,7 +3,7 @@
 
 To make concrete what the \textsc{OracleGate} upper-bound result looks like at the
 episode level, we enumerate a few representative paired tuples from the
-$N{=}300$ low-light~sev~$4$~seed~$0$ comparison. Each row is the \emph{same}
+$N{=}300$ low-light severity~$4$~seed~$0$ comparison. Each row is the \emph{same}
 episode evaluated under three arms in lock-step; ``$\checkmark$'' marks success.
 
 \begin{table}[h]
@@ -59,7 +59,7 @@ longer surface, regardless of which view of the same channel is consulted.
 \centering
 \includegraphics[width=0.98\textwidth]{figures/fig_topdown_traj.pdf}
 \caption{\textbf{Multi-arm top-down trajectories on three matched episodes}
-($N{=}12$ sub-sample of the $N{=}150$ low-light~sev~$4$~seed~$0$ paired
+(a $12$-episode sub-sample of the low-light severity~$4$~seed~$0$ paired
 list). Each panel is a bird's-eye orthographic render of the actual HM3D
 scene (ceiling clipped) with the logged per-step world positions of the
 B0, RES, and \textsc{OracleGate} agents overlaid; the star and 1\,m
@@ -74,7 +74,7 @@ arms diverge into different corners of the same scene and none of them
 lands inside the success ring---the low-light corruption has destroyed
 discriminative content that no RGB-side lever can recover. The three
 panels concretise the bucket sizes reported in
-Tab.~\ref{tab:og-vignettes}: 21 out of 300 rescued, 36 out of 300 broken,
+Table~\ref{tab:og-vignettes}: 21 out of 300 rescued, 36 out of 300 broken,
 and 128 out of 300 tied all-failed.}
 \label{fig:topdown-traj}
 \end{figure*}

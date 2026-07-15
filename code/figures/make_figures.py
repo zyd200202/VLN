@@ -40,8 +40,14 @@ def save(fig, name):
 
 # ----------------------------------------------------------------------
 def fig_motivation():
-    fig, axs = plt.subplots(2, 2, figsize=SIZE_DOUBLE_TALL,
-                            gridspec_kw=dict(hspace=0.60, wspace=0.55))
+    plt.rcParams.update({
+        "font.size": 6.4, "axes.labelsize": 6.8, "axes.titlesize": 7.6,
+        "xtick.labelsize": 6.0, "ytick.labelsize": 6.0,
+        "legend.fontsize": 5.6,
+    })
+    fig, axs = plt.subplots(1, 4, figsize=(7.05, 1.78),
+                            gridspec_kw=dict(wspace=0.72))
+    axs = np.array([[axs[0], axs[1]], [axs[2], axs[3]]])
 
     # --- (a) what degradation does per-episode: paired min-dist scatter ---
     # Same 300 episodes run clean and low-light s4 (paired seed). The point:
@@ -74,36 +80,36 @@ def fig_motivation():
     lost  = (sc == 1) & (sd == 0)   # degradation breaks the episode
     gain  = (sc == 0) & (sd == 1)
     ax.scatter(xc[stay], yc[stay], s=6, color="#BBBBBB", alpha=0.5,
-               edgecolors="none", zorder=2, label="unchanged")
+               edgecolors="none", zorder=2)
     ax.scatter(xc[lost], yc[lost], s=13, color=C_DEGR, alpha=0.9,
-               edgecolors="white", linewidths=0.3, zorder=4,
-               label=f"broken by degr. ($n{{=}}{lost.sum()}$)")
+               edgecolors="white", linewidths=0.3, zorder=4)
     ax.scatter(xc[gain], yc[gain], s=13, color=C_ACC, alpha=0.9,
-               edgecolors="white", linewidths=0.3, zorder=4,
-               label=f"gained ($n{{=}}{gain.sum()}$)")
+               edgecolors="white", linewidths=0.3, zorder=4)
     ax.plot([0, LIM], [0, LIM], color="#999999", lw=0.6, ls="--", zorder=1)
     ax.axvspan(0, 1.0, color="#E6F3E6", zorder=0)
     ax.axhspan(0, 1.0, color="#E6F3E6", zorder=0)
     ax.set_xlim(0, LIM); ax.set_ylim(0, LIM)
     ax.set_xlabel("clean min dist to goal (m)")
     ax.set_ylabel("low-light min dist (m)")
-    ax.set_title("(a) Degradation breaks conversion,\nnot approach",
-                 loc="left", pad=8, fontweight="bold", fontsize=9.0)
-    ax.text(0.97, 0.28,
-            "median min-dist:\nclean 0.11 m $\\to$ low-light 0.15 m",
-            transform=ax.transAxes, ha="right", va="bottom",
-            fontsize=6.4, color="#555555", style="italic", linespacing=1.3)
-    leg = ax.legend(loc="upper right", fontsize=6.4, handletextpad=0.25,
-                    borderpad=0.3, labelspacing=0.25, frameon=True,
-                    framealpha=0.85, edgecolor="#CCCCCC")
-    leg.get_frame().set_linewidth(0.4)
+    ax.set_title("(a) Breaks conversion,\nnot approach",
+                 loc="left", pad=5, fontweight="bold")
+    # in-plot colour-coded labels (no box), left-aligned in the sparse
+    # upper-left region so they clear the diagonal and the red points
+    ax.text(0.24, 0.94, "unchanged", transform=ax.transAxes,
+            ha="left", va="center", fontsize=5.4, color="#9A9A9A")
+    ax.text(0.24, 0.83, f"broken ($n{{=}}{lost.sum()}$)",
+            transform=ax.transAxes, ha="left", va="center",
+            fontsize=5.4, color=C_DEGR, fontweight="bold")
+    ax.text(0.24, 0.72, f"gained ($n{{=}}{gain.sum()}$)",
+            transform=ax.transAxes, ha="left", va="center",
+            fontsize=5.4, color=C_ACC, fontweight="bold")
     ax.grid(axis="both", lw=0.4, alpha=0.4, zorder=1)
 
     # --- (b) M2 failure composition: side-by-side dot pairs ---
     ax = axs[0, 1]
     cats = ["walk-away", "irreversible", "false stop"]
-    clean = [0.78, 0.73, 0.51]
-    degr  = [0.88, 0.79, 0.78]
+    clean = [0.78, 0.73, 0.55]
+    degr  = [0.88, 0.79, 0.76]
     ys = np.arange(len(cats))[::-1]
     for y, c, d in zip(ys, clean, degr):
         ax.plot([c, d], [y, y], color=C_NEUT, lw=1.0, zorder=1)
@@ -112,7 +118,7 @@ def fig_motivation():
         # delta annotation between the two markers (above the line)
         mid = (c + d) / 2
         ax.text(mid, y + 0.18, "+%.2f" % (d - c), ha="center", va="bottom",
-                fontsize=8, color=C_DEGR)
+                fontsize=6.4, color=C_DEGR)
     ax.set_yticks(ys); ax.set_yticklabels(cats)
     ax.set_xticks([0.4, 0.6, 0.8, 1.0])
     ax.set_xlim(0.35, 1.05)
@@ -120,7 +126,7 @@ def fig_motivation():
     # walk-away / irreversible are fractions of failed episodes;
     # false stop is the fraction of executed stops that are false positives.
     ax.set_xlabel("rate")
-    ax.set_title("(b) Failure composition", loc="left", pad=8,
+    ax.set_title("(b) Failure\ncomposition", loc="left", pad=5,
                  fontweight="bold")
     ax.grid(axis="x", lw=0.4, alpha=0.4, zorder=0)
 
@@ -136,7 +142,7 @@ def fig_motivation():
     ax.tick_params(axis="y", labelcolor=C_CLEAN)
     ax.set_ylim(0.30, 1.0)
     ax.set_xticks(sev)
-    ax.set_title("(c) Severity dose-response", loc="left", pad=8,
+    ax.set_title("(c) Severity\ndose-response", loc="left", pad=5,
                  fontweight="bold")
     ax.grid(axis="y", lw=0.4, alpha=0.4, zorder=0)
     # secondary y for irreversible % (no ylabel in the 1x4 layout: the
@@ -147,14 +153,13 @@ def fig_motivation():
     ax2.plot([sev[-2], sev[-1]], [irr[-2], irr[-2]],
              "--", color=C_DEGR, alpha=0.35)
     ax2.set_ylim(55, 100)
-    ax2.set_ylabel("irreversible failures (%)", color=C_DEGR)
     ax2.tick_params(axis="y", labelcolor=C_DEGR)
     # combined legend in safe corner
     lns = [plt.Line2D([], [], color=C_CLEAN, marker="o", label=r"reliability $r$"),
            plt.Line2D([], [], color=C_DEGR, ls="--", marker="s",
                       label="irreversible (%)")]
-    ax.legend(handles=lns, loc="lower left", frameon=False,
-              handletextpad=0.4, borderpad=0.2)
+    ax.legend(handles=lns, loc="lower left", frameon=False, fontsize=5.0,
+              handletextpad=0.3, borderpad=0.15, handlelength=1.3)
 
     # --- (d) M4 real per-episode commit-frame r values ---
     ax = axs[1, 1]
@@ -173,29 +178,30 @@ def fig_motivation():
     # mean diamonds (real means)
     ax.plot(0, clean_mu, "D", color=C_CLEAN, markersize=9, mec="white", mew=1.0, zorder=3)
     ax.plot(1, degr_mu,  "D", color=C_DEGR,  markersize=9, mec="white", mew=1.0, zorder=3)
-    # connector arc (offset so it doesn't sit on the markers)
-    ax.annotate("", xy=(0.78, degr_mu + 0.06), xytext=(0.22, clean_mu - 0.05),
+    # connector arc bowing UP; the delta label sits to the LEFT of the arc
+    # (arc only reaches this low height near its right/low-light end)
+    ax.annotate("", xy=(0.80, degr_mu + 0.05), xytext=(0.20, clean_mu - 0.03),
                 arrowprops=dict(arrowstyle="->", color=C_NEUT, lw=0.9,
-                                connectionstyle="arc3,rad=-0.30"))
-    ax.text(0.50, 0.70, r"$\Delta=%+.2f$" % (degr_mu - clean_mu),
-            ha="center", va="center", fontsize=8, color=C_NEUT)
+                                connectionstyle="arc3,rad=0.38"))
+    ax.text(0.30, 0.60, r"$\Delta=%+.2f$" % (degr_mu - clean_mu),
+            ha="center", va="center", fontsize=6.4, color=C_NEUT)
     # mean labels with clear offsets
-    ax.text(0.22, clean_mu + 0.04, "%.2f" % clean_mu, color=C_CLEAN, fontsize=9,
-            ha="left", va="center")
-    ax.text(0.78, degr_mu, "%.2f" % degr_mu, color=C_DEGR, fontsize=9,
+    ax.text(0.22, clean_mu + 0.04, "%.2f" % clean_mu, color=C_CLEAN,
+            fontsize=7.0, ha="left", va="center")
+    ax.text(0.78, degr_mu, "%.2f" % degr_mu, color=C_DEGR, fontsize=7.0,
             ha="right", va="center")
     ax.set_xticks([0, 1])
     # N = episodes with >=1 commit event, out of 90 per condition
-    ax.set_xticklabels(["clean\n(%d/90 committed)" % len(clean_r),
-                        "low-light\n(%d/90 committed)" % len(degr_r)])
+    ax.set_xticklabels(["clean", "low-light"])
     ax.set_xlim(-0.5, 1.5)
     ax.set_ylim(0.0, 1.10)
-    ax.set_ylabel(r"reliability $r$ at trigger frame")
-    ax.set_title(r"(d) Reliability at commit frame",
-                 loc="left", pad=8, fontweight="bold")
+    ax.set_ylabel(r"$r$ at commit")
+    ax.set_title("(d) Reliability at\ncommit frame",
+                 loc="left", pad=5, fontweight="bold")
     ax.grid(axis="y", lw=0.4, alpha=0.4, zorder=0)
 
     save(fig, "fig_motivation")
+    apply_style()
 
 
 # ----------------------------------------------------------------------

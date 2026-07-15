@@ -40,34 +40,39 @@
 
 \author{Anonymous submission}
 \affiliations{}
-
 \makeatletter
 \let\DRPN@old@maketitle\@maketitle
+
 \def\@maketitle{%
   \DRPN@old@maketitle
-  \par\vspace{0.6em}
-  \begin{minipage}{\textwidth}\centering
-    \includegraphics[width=\textwidth]{figures/fig_teaser.pdf}\\[2pt]
-    \captionof{figure}{\textbf{Restoring the image does not restore
-    navigation.} \textbf{(a)} Blanket restoration recovers image quality
-    (PSNR $7.4{\to}15.9$\,dB; blind reliability at the committing frame
-    $0.39{\to}0.89$). \textbf{(b)} The same restoration moves success by only
-    $+0.04$, indistinguishable from no intervention ($N{=}300$ paired,
-    McNemar $p{=}0.182$). \textbf{(c)} \emph{Background:} one representative
-    HM3D ObjectNav episode under low-light severity~$4$; bright path traces
-    the real rendered trajectory. \emph{Annotations:} aggregate statistics
-    on the $N{=}300$ main split---the agent reaches within one metre of the
-    goal in $62\%$ of episodes but succeeds in only $37\%$, a $26$-point
-    reach-to-success gap that no perception-side intervention closes.
-    \textbf{(d)} The full nine-arm intervention sweep (companion to
-    Tab.~\ref{tab:sweep}): markers are paired $\Delta$SR vs.\ the frozen
-    baseline, bars are bootstrap $95\%$ CIs, $*$ marks McNemar
-    $p{<}0.05$. Every deployable arm is either indistinguishable from
-    zero or \emph{significantly negative}; the only significant positive
-    is the non-deployable per-frame appearance oracle, capped at
-    $+0.057$.}
+  \par\vspace{-0.8em}
+
+  \begin{minipage}{\textwidth}
+    \centering
+
+    \includegraphics[
+      width=1.0\textwidth,
+      trim=3 3cm 0 4cm,
+      clip
+    ]{figures/motivation.pdf}
+
+    \vspace{-0.4em}
+
+    \captionof{figure}{
+      \textbf{Restoring the image does not restore navigation.}
+      \textbf{Left:} Restoration improves PSNR from $7.4$ to
+      $15.9$\,dB, but success rises only from $37\%$ to $41\%$.
+      \textbf{Middle:} Under low-light severity $4$, the agent reaches
+      within $1$\,m in $61\%$ of episodes but succeeds in only $37\%$,
+      revealing a $24$-point commitment gap.
+      \textbf{Right:} Deployable test-time fixes yield only
+      ${\sim}{+}0.04$ $\Delta$SR at best or negative gains, motivating
+      degradation-aware training and learned multimodal sensing.
+    }
     \label{fig:teaser}
-  \end{minipage}\par\vspace{0.6em}
+  \end{minipage}
+
+  \par\vspace{0.4em}
 }
 \makeatother
 

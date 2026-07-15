@@ -1,13 +1,33 @@
 \FloatBarrier
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=0.68\textwidth]{figures/fig_case_studies.pdf}\\[2pt]
+\includegraphics[width=0.68\textwidth]{figures/fig_trajectories.pdf}
+\caption{\textbf{Episode-level views of the paired low-light cell.}
+\emph{Top}: per-step distance to goal and reliability $r$ (B0, RES,
+\textsc{OracleGate}, \emph{same} episode): a \emph{rescued}, a
+\emph{broken}, and a \emph{tied} episode in which B0 touches $0.02$\,m
+yet never commits---perception is restored, the decision is not.
+\emph{Bottom}: top-down trajectories (stars: goal, $1$\,m radius).
+Interventions reroute \emph{where} the agent goes far less than
+\emph{whether} it commits.}
+\label{fig:case-studies}
+\label{fig:trajectories}
+\end{figure*}
+
+\input{sections/_sweep_block}
+
 \section{Experiments}
 \label{sec:exp}
 
 We now test the prediction of the diagnosis at scale. We first describe the
 paired protocol, then report (i)~the degradation effect that defines the
 benchmark, (ii)~two negative results that localize the bottleneck, (iii)~a
-mechanism analysis that explains \emph{why} the candidates cap, (iv)~a sweep
-showing the bottleneck resists the full intervention space, and (v)~a
-methodological warning about sample size.
+mechanism analysis that explains \emph{why} the candidates cap,
+(iv)~evidence that the bottleneck resists a six-family intervention
+sweep, and (v)~a
+cross-corruption replication with a methodological warning about the
+choice of sample size.
 
 \subsection{Protocol}
 We evaluate on HM3D ObjectNav with the InstructNav backbone
@@ -15,247 +35,128 @@ We evaluate on HM3D ObjectNav with the InstructNav backbone
 \citep{wang2024qwen2vl} as the reasoning VLM (deterministic decoding on a
 single RTX~5090; no external API), the GLEE open-vocabulary detector
 \citep{wu2024glee} for segmentation, and InstructNav's value-map frontier
-explorer for goal selection. Choosing an open-weight backbone lets every
-frame of every episode be re-run bit-identical from the released seeds and
-prompts, which is the reproducibility bar we hold ourselves to for a
-negative-result release. Conclusions are drawn at the $N{=}300$ main-split
-scale; smaller runs are used only as pilot runs and are never mixed with
-$N{=}300$ numbers. Each arm is run against the identical
-backbone on the same episodes, so comparisons are paired. We report success rate
+explorer for goal selection; the open-weight backbone makes every episode
+re-runnable bit-identical from the released seeds. Conclusions are drawn
+at the $N{=}300$ main-split scale; smaller runs serve only as pilots and
+are never mixed with $N{=}300$ numbers. Each arm is run against the identical frozen baseline
+(B0) on the same episodes, so comparisons are paired. We report success rate
 (SR) and SPL, the paired per-episode difference $\Delta$SR, McNemar's exact test
 on the discordant pairs, and a bootstrap $95\%$ CI over the paired differences
-($B{=}5000$). Figure~\ref{fig:pipeline} (top) summarizes the instrument. The
-primary degradation is low-light at severity~$4$, which
-darkens the image while preserving geometry
-(Fig.~\ref{fig:corruption-gallery}, bottom). We avoid single-run point estimates
-because the clean SR of the backbone alone ranges over $0.27$--$0.47$ across
-seeds.
-
-\begin{figure*}[!t]
-\centering
-\includegraphics[width=0.92\textwidth]{figures/fig_pipeline.pdf}\\[6pt]
-\includegraphics[width=0.95\textwidth]{figures/fig_corruption_gallery.pdf}
-\caption{\textbf{The diagnosis instrument and its stimuli.} \emph{Top:} a
-frozen InstructNav backbone is exposed to identically-seeded clean and
-degraded ObjectNav episodes; a blind per-step reliability estimator
-instruments the policy without changing it; outcomes are reach (within
-$1$\,m), commit, and stop; paired McNemar exact $p$ on the discordant pairs
-is the unit of comparison. \emph{Bottom:} the four corruption channels at
-the severity used in all main results---two HM3D~val scenes rendered clean
-and under each corruption at severity~$4$: low-light (gamma), motion-blur
-(kernel $25$), fog (intensity $0.8$), Gaussian noise ($\sigma{=}0.35$).
-PSNR vs.\ clean drops from $>\!30$\,dB to $7$--$16$\,dB depending on
-channel. All corruptions preserve scene geometry; what varies is the
-photometric evidence available to the RGB channel.}
-\label{fig:pipeline}
-\label{fig:corruption-gallery}
-\end{figure*}
+($B{=}5000$). Figure~\ref{fig:pipeline} (Appendix) illustrates the
+instrument; the bottom strip of Figure~\ref{fig:method} previews the
+four corruption channels. The primary degradation is low-light at severity~$4$, which
+darkens the image while preserving geometry. Single-run point estimates
+are avoided: the clean SR of the backbone alone ranges over
+$0.27$--$0.53$ across seeds. Corruptions are injected into the RGB
+stream only; depth, pose, and the episode specification are untouched,
+so paired differences isolate the causal effect of the corrupted
+visual input on navigation.
 
 \subsection{The Degradation Effect (Benchmark)}
-Structure-preserving degradation produces a large, real drop in navigation
-success, which is the effect the benchmark is built to study. Pooling three
-seeds ($n{=}90$), low-light lowers SR from $0.433$ ($95\%$ CI $[0.333,0.533]$)
-to $0.222$ ($[0.144,0.311]$); the paired drop is $-0.211$ with CI
-$[-0.322,-0.100]$, excluding zero. At the $N{=}300$ main split the low-light
-baseline SR is $0.37$. Motion-blur at the same severity gives $-0.056$ with CI
-$[-0.167,+0.056]$, which does not exclude zero, so we use low-light as the
-primary condition and report motion-blur as a non-significant case. The benchmark applies the same protocol across low-light, fog,
-motion-blur, and Gaussian noise at multiple severities.
+Structure-preserving degradation produces a large, real drop in
+navigation success---the effect this benchmark studies. The M-study already
+quantified it on the $n{=}90$ slice (paired drop $-0.211$, CI excluding
+zero); at the $N{=}300$ main split the drop persists, from $0.44$ clean to
+$0.37$ under low-light (McNemar $p{=}0.029$). Motion-blur at the same
+severity gives $-0.056$ (CI $[-0.167,+0.056]$, not excluding zero), so
+low-light is the primary condition and motion-blur a reported
+non-significant case. The benchmark applies the same protocol at
+multiple severities across all four corruption channels.
 
 \subsection{Two Negative Results at $N{=}300$}
-The diagnosis predicts that appearance-level and where-to-go interventions
-should not recover success, and Table~\ref{tab:sweep} confirms this at the
-$N{=}300$ main split. Blanket restoration (RES) raises low-light SR from
+The diagnosis predicts two negative results---appearance (RES;
+\textsc{OracleGate} is its upper bound) and where-to-go reweighting
+(R-Weight)---and Table~\ref{tab:sweep} confirms both at $N{=}300$. Blanket restoration (RES) raises low-light SR from
 $0.370$ to $0.410$, a paired $\Delta$SR of $+0.040$ that is not significant
-($p{=}0.18$); the per-frame appearance oracle (\textsc{OracleGate}), an
-upper bound on any test-time arbitration over appearance, reaches only
-$0.427$ ($+0.057$, $p{=}0.04$), statistically indistinguishable from
-blanket restoration ($+0.017$ over RES). Reliability-gated where-to-go
-reweighting (M1g) also reaches $+0.040$ ($p{=}0.20$). Every candidate
-converges to the same non-significant ${\sim}{+}0.04$, and the oracle in
-particular leaves no room: no router over restored versus degraded views
-can exceed it.
-
-Figure~\ref{fig:case-studies} shows what these aggregates look like at the
-episode level, one paired episode per outcome bucket: an oracle
-\emph{rescue}, an oracle \emph{break} (greedy per-frame view selection
-walks the agent away from a goal RES had reached), and a \emph{tied}
-failure in which the baseline parks $0.02$\,m from the goal yet never
-commits---reach without success, the signature of the commitment
-bottleneck. Figure~\ref{fig:trajectories} shows the same failure modes
-spatially: top-down maps of paired episodes in which all three arms start
-from the identical pose and the trajectories diverge only through the
-intervention.
-
-\begin{figure*}[!t]
-\centering
-\includegraphics[width=0.88\textwidth]{figures/fig_case_studies.pdf}
-\caption{\textbf{Episode-level decision traces from the paired $N{=}300$
-low-light cell.} Top: distance to goal per step for B0, RES, and
-\textsc{OracleGate} on the \emph{same} episode; markers show terminal
-success ($\bullet$) or failure ($\times$); the green band is the $1$\,m
-success radius. Bottom: per-step blind reliability $r$ (faint: raw;
-solid: $9$-step moving average). \textbf{(a)}~\emph{rescued}: only the
-non-deployable per-frame appearance oracle converges. \textbf{(b)}~\emph{broken}:
-the same oracle, by greedy per-frame view choice, abandons a goal RES had
-secured. \textbf{(c)}~\emph{tied}: B0 touches $0.02$\,m from the goal yet
-never commits---reach and success decouple. Note in all three cases RES
-(blue) sustains high $r$: perception is confidently restored while the
-decision outcome is unchanged.}
-\label{fig:case-studies}
-\end{figure*}
-
-\begin{figure*}[!t]
-\centering
-\includegraphics[width=0.92\textwidth]{figures/fig_trajectories.pdf}
-\caption{\textbf{Top-down trajectories of paired episodes (low-light
-sev.~4).} Backgrounds are bird's-eye orthographic renders of the actual
-HM3D scenes (ceiling clipped); trajectories are the logged per-step world
-positions, so curves sit exactly on the floors they were walked on. All
-arms share the identical start pose and episode; stars mark
-the goal instances with the $1$\,m success radius.
-\textbf{(a)}~B0 (red) passes $0.10$\,m from the sofa yet never issues a
-stop---reach without success. \textbf{(b)}~restoration rescues: RES (blue)
-and \textsc{OracleGate} (purple) both convert, B0 stalls $1.8$\,m out.
-\textbf{(c)}~only the per-frame appearance oracle finds the target room;
-B0 and RES wander the same wrong wing. \textbf{(d)}~the same oracle,
-choosing views greedily per frame, abandons a chair that RES secures and
-ends $2.8$\,m away. The interventions reroute \emph{where} the agent goes
-far less than they change \emph{whether} it commits.}
-\label{fig:trajectories}
-\end{figure*}
+($p{=}0.18$); the per-frame appearance oracle (\textsc{OracleGate})
+reaches only $0.427$ ($+0.057$, $p{=}0.04$), indistinguishable from RES
+($+0.017$);
+reliability-gated where-to-go reweighting (R-Weight) also reaches
+$+0.040$ ($p{=}0.20$). All three converge to the same
+non-significant ${\sim}{+}0.04$, and no per-frame router over restored
+versus degraded views can exceed the oracle.
+Figure~\ref{fig:case-studies} grounds these aggregates in individual
+episodes.
 
 \subsection{Mechanism: Why the Candidates Cap}
 The decomposition $\text{SR}=\text{reach}-\text{commit/stop loss}$ explains
-the ceiling: across B0, RES, and M1g, reach (${\sim}0.62$) and commit/stop
-loss (${\sim}0.25$) are nearly invariant, so no candidate changes whether
+the ceiling: across B0, RES, and R-Weight, reach (${\sim}0.62$) and commit/stop
+loss (${\sim}0.23$) are nearly invariant, so no candidate changes whether
 the agent reaches the goal or converts a reach into a stop. The per-episode
 logs localize \emph{where} this invariance lives
-(Fig.~\ref{fig:decomp}). First, the distribution of the distance at which
-the agent \emph{first commits} is unchanged by any intervention---the
-B0, RES, and even OracleGate ECDFs coincide, with ${\sim}70\%$ of first
-commits firing more than $3$\,m from the goal
-(Fig.~\ref{fig:decomp}a). Second, RES shifts the reliability
-\emph{distribution} at those commit frames from a median of $0.40$ to
-$1.00$, so the frames now look trustworthy, yet the probability that a
-commit converts to success moves only $0.42\to0.43$
-(Fig.~\ref{fig:decomp}b). Third, the episodes whose outcome does flip
-under RES were already at the $1$\,m success margin under B0 (median
-rescued episode: $1.1$\,m), so the intervention perturbs threshold
-episodes rather than repairing far failures
-(Fig.~\ref{fig:decomp}c). Restoring perception without repairing decision
-is precisely the $26$-point reach-to-success gap that no candidate
-touches, which is exactly the ${\sim}{+}0.04$ ceiling observed in
+(Figure~\ref{fig:decomp}, Appendix). First, the distance at which the agent
+\emph{first commits} is unchanged by any intervention---the B0, RES, and
+even OracleGate ECDFs coincide, with ${\sim}70\%$ of first commits firing
+more than $3$\,m from the goal (Figure~\ref{fig:decomp}a). Second, RES
+shifts the reliability distribution at those commit frames from a median
+of $0.40$ to $1.00$, yet commit-to-success conversion moves only
+$0.42\to0.43$ (Figure~\ref{fig:decomp}b). Third, the episodes that do flip
+under RES were already at the $1$\,m margin under B0 (median $1.1$\,m):
+the intervention perturbs threshold episodes rather than repairing far
+failures (Figure~\ref{fig:decomp}c). Restoring perception without
+repairing decision leaves the ${\sim}{+}0.04$ ceiling of
 Table~\ref{tab:sweep}.
 
-\begin{figure*}[!t]
-\centering
-\includegraphics[width=\textwidth]{figures/fig_decomp.pdf}
-\caption{\textbf{Inside the commitment bottleneck (per-episode logs of the
-paired $N{=}300$ low-light runs; nothing here repeats
-Table~\ref{tab:sweep}).}
-\textbf{(a)}~ECDF of the distance to goal at the \emph{first commit event}:
-the B0, RES, and \textsc{OracleGate} curves are nearly indistinguishable,
-and ${\sim}70\%$ of first commits fire more than $3$\,m from the goal---no
-intervention changes \emph{where} the agent decides it has found the
-object. \textbf{(b)}~Blind reliability $r$ at the commit frame, one dot per
-committing episode: RES shifts the median from $0.40$ to $1.00$, yet the
-probability that a commit converts to success moves only $0.42\to0.43$.
-\textbf{(c)}~Paired per-episode minimum distance (B0 vs.\ RES) with
-outcome flips coloured: rescued episodes (teal) sit almost entirely inside
-or at the $1$\,m success band under B0 already (median $1.1$\,m), and
-broken episodes (red) mirror them---the intervention shuffles the margin
-rather than moving the population of far failures.}
-\label{fig:decomp}
-\end{figure*}
-
-\subsection{The Bottleneck Resists the Full Intervention Space}
+\subsection{The Bottleneck Resists a Six-Family Intervention Sweep}
 \label{sec:sweep}
-If the loss were a single mislocated module, \emph{some} layer-specific fix
-would move it. We therefore sweep six causal families
-(Table~\ref{tab:sweep}, visualized in Fig.~\ref{fig:teaser}d): appearance
-(restoration and its per-frame oracle
-upper bound), where-to-go reweighting, commit-timing revocation, forced
-commitment, temporal/multi-view aggregation, and a depth-based multimodal
-probe (Sec.~\textit{Probing the Multimodal Direction}). All non-oracle arms
-below the main split are scored at a common $N{=}150$ on the same low-light
-sev~$4$ seed~$0$ val episodes and paired against the same $N{=}150$
-baseline, so all comparisons are exactly on the same episodes. Every
-\emph{deployable} family either lands at the same non-significant ${\sim}0$
-or \emph{significantly hurts} success: REVOKE, MUAP and DXCV lower paired
-SR by $0.12$--$0.17$ at $p{<}0.05$ (DXCV at $p{<}0.001$); the only arm
-clearing $p{<}0.05$ with a \emph{positive} $\Delta$SR is the non-deployable
-appearance oracle, and even it caps at $+0.057$. Crucially, accumulating
-evidence across frames, views, or modalities does not just fail to recover
-the decision---it can \emph{amplify} the wrong one, because the degradation
-removes the information that distinguishes the goal at the decision point
-rather than adding independent noise that averages out.
-
-\input{sections/_sweep_block}
+If the loss lived in a single module reachable by a layer-specific fix,
+some arm of a broad sweep should move it. We sweep six causal
+families (Table~\ref{tab:sweep}, visualized in Figure~\ref{fig:teaser}, right):
+appearance (RES and its oracle upper bound), where-to-go
+reweighting, commit-timing revocation, forced commitment,
+temporal/multi-view aggregation, and a depth-based multimodal probe. The
+six lower arms of Table~\ref{tab:sweep} are scored at a common $N{=}150$
+on the same low-light severity~$4$ seed~$0$ episodes against the same
+baseline, so comparisons are exactly paired. Every
+\emph{deployable} family either lands at a non-significant ${\sim}0$
+or \emph{significantly hurts} success: REVOKE, ReObserve and DepthVeto
+lower paired SR by $0.12$--$0.17$ at $p{<}0.05$ (DepthVeto at
+$p{<}0.001$); the only arm clearing $p{<}0.05$ with a \emph{positive}
+$\Delta$SR is the non-deployable appearance oracle.
+Crucially, accumulating evidence across frames, views, or
+modalities can \emph{amplify} the wrong decision rather than repair it,
+consistent with degradation suppressing the goal-distinguishing
+evidence at the frame where the commitment fires.
 
 \subsection{Probing the Multimodal Direction}
 \label{sec:road2}
-A natural worry is that the bottleneck is specifically an RGB problem and
-that adding a degradation-invariant sensing channel would dissolve it. We
-test this with a train-free probe, \textsc{DXCV} (Depth Cross-Modal
-Verifier): when the VLM proposes \texttt{Flag=True} at a low-reliability
-frame, a low-threshold GLEE pass locates the target mask and the depth
-sensor must agree---masked depth median in $[0.3,3.5]$\,m and IQR at most
-$0.6$\,m; otherwise the commit is vetoed and search resumes. Habitat's
-depth channel is rendered from geometry rather than light, so it is
-invariant to low-light corruption. Paired against the same $N{=}150$
-baseline (Table~\ref{tab:sweep}): $\Delta\text{SR}{=}{-}0.173$ (McNemar
-$p{<}0.001$), \emph{a strongly negative effect}. Vetoing geometrically
-implausible commits on a frozen agent removes a small number of true
-positives along with the false ones; without having \emph{learned} the
-joint RGB$+$depth representation the verifier cannot tell them apart, and
-the net effect of bolting an extra modality onto a clean-trained policy is
-to \emph{lower} SR rather than raise it. A multimodal \emph{remedy}, as
-opposed to a multimodal \emph{probe}, therefore requires a detector that
-has learned to fuse RGB with depth under degraded RGB---the training-side
-fix the Conclusion advocates.
-
-\subsection{Sample Size and Scope}
-The per-condition restoration effect is small and sample-sensitive: on
-Gaussian noise, an $N{=}40$ pilot yields $\Delta\text{SR}{=}-0.125$
-(RES apparently \emph{hurts}), while a matched $N{=}150$ run collapses
-to $\Delta\text{SR}{=}+0.000$---the pilot's negative direction does not
-survive scale. We therefore
-report all conclusions at $N{=}300$, and treat smaller runs as pilot runs
-only (Appendix~\ref{app:sample-size}). The main-split numbers use the
-InstructNav planner with Qwen2-VL-7B, with low-light as the primary
-degradation. The next subsection extends the headline cell to the other
-three corruption channels at matched $N{=}150$ paired scale.
+Is the bottleneck an RGB-specific problem that a degradation-invariant
+sensing channel would dissolve? We test this with a train-free probe,
+DepthVeto (a depth cross-modal verifier): when the VLM proposes
+\texttt{Flag=True} at a low-reliability frame, a low-threshold GLEE pass
+locates the target mask and the depth sensor must agree (thresholds in
+Appendix~\ref{app:hp}), else the commit is vetoed and search resumes.
+Habitat's depth is rendered from geometry, not light, so it is invariant
+to low-light. Paired against the same $N{=}150$ baseline
+(Table~\ref{tab:sweep}): $\Delta\text{SR}{=}{-}0.173$ (McNemar
+$p{<}0.001$), the strongest negative effect in the sweep. Vetoing geometrically
+implausible commits on a frozen agent removes true positives along with
+the false ones: without a \emph{learned} joint RGB$+$depth representation
+the verifier cannot tell them apart. A multimodal \emph{remedy}
+therefore requires a detector \emph{trained} to fuse RGB with
+depth---the training-side fix the Conclusion advocates.
 
 \subsection{Cross-Corruption Replication}
 \label{sec:cross-corruption}
-A reviewer-anticipated concern is that the bottleneck is a low-light
-artefact: motion-blur, fog, or noise might preserve enough photometric
-evidence that restoration \emph{does} recover success. We test this
-directly by holding the InstructNav+Qwen2-VL-7B pipeline bit-identical
-across the four channels---mapper, depth sensor, GLEE detector, frontier
-planner, prompt, decoding seed, episode list, split, and severity all
-frozen---and only swapping the corruption. Table~\ref{tab:cross-corruption}
-reports the paired benchmark. No cell reaches significance at
-$\alpha{=}0.05$; the sign of $\Delta\text{SR}$ flips between motion-blur
-($-0.040$) and the other three channels ($+0.000$--$+0.047$), reproducing
-the small-sample sign-flip diagnosis of \emph{Sample Size and Scope}. The
-bottleneck is thus not a property of any one corruption but of the
-\emph{commitment-on-degraded-input} interface that VLM-driven planners
-share.
+A warning about scale first: on Gaussian noise an $N{=}40$ pilot yields
+$\Delta\text{SR}{=}-0.125$ (RES apparently \emph{hurts}) while a matched
+$N{=}150$ run collapses to $+0.000$ (Appendix~\ref{app:sample-size}), so
+replication is run at matched scale. To rule out a low-light artefact, we
+hold the InstructNav+Qwen2-VL-7B pipeline bit-identical and only swap the
+corruption across low-light, motion-blur, fog, and Gaussian noise
+(Table~\ref{tab:cross-corruption}, Appendix). No cell reaches significance at $\alpha{=}0.05$; the sign of
+$\Delta\text{SR}$ flips between motion-blur ($-0.040$) and the other three
+channels ($+0.000$--$+0.047$), reproducing the small-sample sign-flip
+diagnosis above. The bottleneck is thus not a property of any one
+corruption but of the \emph{commitment-on-degraded-input} interface
+itself.
 
 \paragraph{A first training-side probe.}
-If the diagnosis is right, the lever the sweep could not reach should be
-reachable by changing what the agent was \emph{trained} on. As a minimal
-probe we train a $10^{6}$-parameter residual head adapter on
-(clean,\,degraded) SwinL feature pairs from scene-disjoint episodes
-($2$k steps; Appendix~\ref{app:road1}). On held-out scenes it moves
-degraded features $13.5\%$ closer to their clean counterparts in L1, and
-its paired navigation effect ($\Delta\text{SR}{=}{+}0.040$, $N{=}150$,
-$p{=}0.377$) already matches the best deployable test-time arm of
-Table~\ref{tab:sweep}---while leaving the entire training recipe
-untouched. At pilot scale the effect is not statistically resolvable and
-we claim no more than direction; we report it as the baseline the
-released benchmark is designed to measure.
-
-\input{sections/_cross_backbone_block}
+If the diagnosis is right, the lever should sit on the \emph{training}
+side: a minimal probe---a $10^{6}$-parameter
+residual adapter trained on scene-disjoint (clean,\,degraded) SwinL
+feature pairs---moves degraded features $13.5\%$ closer to clean (L1)
+and matches the best deployable arm of Table~\ref{tab:sweep}
+($\Delta\text{SR}{=}{+}0.040$, $N{=}150$, $p{=}0.377$;
+Appendix~\ref{app:road1}), though at pilot scale the effect is not
+resolvable.

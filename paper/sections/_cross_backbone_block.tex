@@ -15,12 +15,11 @@ gauss.\ noise & $0.253$ & $0.253$ & $+0.000$ & $[-0.073,+0.073]$ & $1.000$ \\
 \caption{\textbf{Cross-corruption paired benchmark ($N{=}150$, seed~$0$).}
 InstructNav\,$+$\,Qwen2-VL-7B on HM3D~val, held bit-identical across the
 four corruption channels (severity~$4$); the only comparison is blanket
-RGB restoration (RES) against the frozen baseline (B0), the intervention
-a reviewer would first ask about ($\Delta$SPL is similarly null on every
+RGB restoration (RES) against the frozen baseline (B0), ($\Delta$SPL is similarly null on every
 cell, $|\Delta\text{SPL}|{\leq}0.03$). All four cells stay non-significant at
 $\alpha{=}0.05$, and the sign of $\Delta$SR flips between motion-blur
 ($-$) and the other three ($+$)---matching the small-sample sign-flip
-diagnosis in \emph{Sample Size and Scope}. The commitment-on-degraded-input
+diagnosis in \emph{Cross-Corruption Replication}. The commitment-on-degraded-input
 fingerprint is thus not tied to any single corruption channel.}
 \label{tab:cross-corruption}
 \end{table}

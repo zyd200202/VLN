@@ -1,9 +1,44 @@
+\section{The Instrument, Stimuli, and Episode-Level Traces}
+\label{app:instrument}
+
+This appendix collects figures referenced from the main text: the
+diagnosis instrument (Figure~\ref{fig:pipeline}) and the per-episode
+mechanism decomposition (Figure~\ref{fig:decomp}).
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=0.86\textwidth]{figures/fig_decomp.pdf}
+\caption{\textbf{Inside the commitment bottleneck (per-episode logs, paired
+$N{=}300$ low-light).}
+\textbf{(a)}~ECDF of distance at the \emph{first commit}: B0, RES, and
+\textsc{OracleGate} coincide; ${\sim}70\%$ of first commits fire ${>}3$\,m
+from the goal. \textbf{(b)}~Reliability $r$ at the commit frame: RES
+shifts the median $0.40\to1.00$, yet commit-to-success conversion moves
+only $0.42\to0.43$. \textbf{(c)}~Paired min-distance (B0 vs.\ RES) with
+flips coloured: rescued episodes (teal) were already at the $1$\,m margin
+under B0 (median $1.1$\,m); the intervention shuffles the margin rather
+than repairing far failures.}
+\label{fig:decomp}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig_pipeline.pdf}
+\caption{\textbf{The diagnosis instrument.} A
+frozen InstructNav backbone is exposed to identically-seeded clean and
+degraded ObjectNav episodes; a blind per-step reliability estimator
+instruments the policy without changing it; outcomes are reach (within
+$1$\,m), commit, and stop; paired McNemar exact $p$ on the discordant pairs
+is the unit of comparison.}
+\label{fig:pipeline}
+\end{figure*}
+
 \section{Sample Size and Sign-Flip Diagnostic}
 \label{app:sample-size}
 
 The per-condition restoration effect is small and sample-sensitive: on the
 Gaussian-noise pilot run ($N{=}40$) we measure $\Delta\text{SR}{=}-0.125$,
-while the matched $N{=}150$ comparison of Tab.~\ref{tab:cross-corruption}
+while the matched $N{=}150$ comparison of Table~\ref{tab:cross-corruption}
 collapses to $\Delta\text{SR}{=}+0.000$---the pilot's negative direction is
 an artefact of which five episodes the small sample draws. We therefore
 report all main conclusions at $N{=}300$ with paired tests, and warn that
@@ -17,8 +52,8 @@ are the natural next steps.
 \section{Paired Protocol and Statistical Tests}
 \label{app:protocol}
 
-The diagnosis instrument is illustrated in Figure~\ref{fig:pipeline} of the
-main paper. For each (severity, seed) pair, every arm is evaluated on the same fixed
+The diagnosis instrument is illustrated in Figure~\ref{fig:pipeline}
+(App.~\ref{app:instrument}). For each (severity, seed) pair, every arm is evaluated on the same fixed
 list of episodes in the same order, so that the per-episode success vector
 $y^{\text{arm}}\in\{0,1\}^N$ is directly comparable across arms. The paired
 difference vector is $\Delta_i = y^{\text{arm}}_i - y^{\text{B0}}_i$; the
@@ -39,23 +74,26 @@ probe set rather than on the val episodes used for reporting.
 \begin{itemize}
 \item \textbf{RES}: a blanket low-light restoration network, applied at
 every frame; no reliability gate.
-\item \textbf{M1g (reliability-gated reweight)}: $\alpha{=}1.0$,
-$\beta_{\max}{=}0.6$, $\tau_{\text{gate}}{=}0.9$.
+\item \textbf{R-Weight (reliability-gated reweight; code name
+\texttt{M1g})}: $\alpha{=}1.0$, $\beta_{\max}{=}0.6$,
+$\tau_{\text{gate}}{=}0.9$.
 \item \textbf{OracleGate (upper bound)}: at every step, an oracle picks
 whichever of the degraded or restored view yields the better navigation
 outcome; not deployable.
 \item \textbf{REVOKE}: stall-window $K{=}6$, displacement floor
 $\epsilon{=}0.15$, far-from-goal threshold $0.8$\,m, $\leq 2$ revocations
 per episode, cooldown $2.0$\,s.
-\item \textbf{CRV (close-range recall verifier)}: rel-gate $0.90$, GLEE
+\item \textbf{NearVerify (close-range recall verifier; code name
+\texttt{CRV})}: rel-gate $0.90$, GLEE
 conf $0.10$, floor $0.12$, mask area $\geq 5000$\,px, frames $1$, max $3$
 verifications, centre tolerance $0.18$.
-\item \textbf{MUAP}: target hold-frames $8$, min frames $3$, match
-distance $0.6$\,m; uap reobserve mode, $\tau_{\text{commit}}{=}0.9$, max
-re-obs $3$, conf margin $0.35$.
+\item \textbf{ReObserve (code name \texttt{MUAP})}: target hold-frames $8$,
+min frames $3$, match distance $0.6$\,m; re-observe mode,
+$\tau_{\text{commit}}{=}0.9$, max re-observations $3$, confidence margin
+$0.35$.
 \item \textbf{FUSE (multi-view)}: $\beta{=}0.10$, IoU $0.5$, reliability
 floor $0.2$, identity-mask MAD $1.0$.
-\item \textbf{DXCV}: rel-gate $0.85$, masked depth median in
+\item \textbf{DepthVeto (code name \texttt{DXCV})}: rel-gate $0.85$, masked depth median in
 $[0.30, 3.50]$\,m, masked depth IQR $\leq 0.60$\,m, mask area
 $\geq 2500$\,px, GLEE conf $0.10$ (with floor $0.12$ for trustworthiness).
 \end{itemize}
@@ -66,17 +104,17 @@ $\geq 2500$\,px, GLEE conf $0.10$ (with floor $0.12$ for trustworthiness).
 For each paired comparison we report the rescue count $b_{01}$ (B0 fails,
 arm succeeds) and break count $b_{10}$ (B0 succeeds, arm fails); their
 difference is the unnormalised paired $\Delta$success. The $N{=}300$ arms
-are RES ($b_{01}{=}24$, $b_{10}{=}12$), OracleGate ($28$, $11$), and M1g
-($27$, $15$). At the $N{=}150$ unified queue on low-light s4, ROUTER
-reports $b_{01}{=}10$, $b_{10}{=}8$;
+are RES ($b_{01}{=}40$, $b_{10}{=}28$), OracleGate ($40$, $23$), and R-Weight
+($43$, $31$). At the $N{=}150$ unified queue on low-light severity~$4$, ROUTER
+reports $b_{01}{=}21$, $b_{10}{=}19$;
 REVOKE $b_{01}{=}11$, $b_{10}{=}29$;
-CRV    $b_{01}{=}18$, $b_{10}{=}15$;
-MUAP   $b_{01}{=}19$, $b_{10}{=}37$;
+NearVerify $b_{01}{=}18$, $b_{10}{=}15$;
+ReObserve  $b_{01}{=}19$, $b_{10}{=}37$;
 FUSE   $b_{01}{=}20$, $b_{10}{=}22$;
-DXCV   $b_{01}{=}10$, $b_{10}{=}36$.
-Three arms (REVOKE, MUAP, DXCV) thus break more than twice as many
-episodes as they rescue, matching the significant negative $\Delta$SR
-reported in the sweep panel of Figure~\ref{fig:teaser}(d).
+DepthVeto  $b_{01}{=}10$, $b_{10}{=}36$.
+Three arms (REVOKE, ReObserve, DepthVeto) thus break roughly twice as many
+episodes as they rescue or more, matching the significant negative
+$\Delta$SR reported in the sweep panel of Figure~\ref{fig:teaser} (right).
 
 \section{Forward Directions Implied by the Diagnosis}
 \label{app:roadmap}
@@ -89,7 +127,7 @@ frozen, clean-trained agent are bounded by the irreducible commitment
 error; the two viable forward directions are (1) degradation-aware training
 and adaptation, and (2) genuinely multi-modal sensing that has
 \emph{learned} to fuse RGB with a degradation-invariant channel (rather
-than consulting it at inference, as our DXCV probe does).}
+than consulting it at inference, as our DepthVeto probe does).}
 \label{fig:roadmap}
 \end{figure*}
 
@@ -114,7 +152,7 @@ trained offline on $(\text{clean}, \text{degraded})$ feature pairs from a
 scene-disjoint sub-split of HM3D~val (see \emph{Pipeline}), then wedged
 between the frozen SwinL backbone and the frozen pixel\_decoder + predictor
 at inference. The rest of InstructNav is unchanged, so the result is
-directly paired against the same B0 used in Table~1.}
+directly paired against the same B0 used in Table~\ref{tab:sweep}.}
 \label{fig:road1}
 \end{figure*}
 
@@ -130,7 +168,7 @@ $30$-scene deny-list complement with random forward/turn actions and dump
 $1{,}500$ $(\text{clean}, \text{degraded})$ $480{\times}640$ RGB pairs.
 The adapter therefore trains on pixels from val scenes disjoint at
 \emph{scene identity} from anything the paired eval consumes. The
-degradation is low-light~sev~$4$ applied through the same
+degradation is low-light severity~$4$ applied through the same
 \texttt{drphysnav\_integration.degrade\_rgb} function used in the main
 paper, with a deterministic per-frame seed
 $s_{\text{frame}}=100003\!\cdot\!s_{\text{run}} + 1009\!\cdot\!\text{ep} + \text{step}$. (B)~SwinL is loaded from the same GLEE-L
@@ -150,8 +188,8 @@ environment variable \texttt{DRPN\_ROAD1\_ADAPTER}; an import-time
 monkey-patch wraps \texttt{SwinL.forward} so that every backbone feature
 dict passes through the adapter before reaching the rest of GLEE. The
 InstructNav forward path is otherwise byte-identical to B0. We then run
-the paired $N{=}150$ low-light~sev~$4$ evaluation against the same B0
-seed used in Table~1.
+the paired $N{=}150$ low-light severity~$4$ evaluation against the same B0
+seed used in Table~\ref{tab:sweep}.
 
 \paragraph{Result.}
 The hold-out feature L1 between adapted-degraded and clean drops from a
@@ -165,7 +203,7 @@ $b_{01}{=}\textbf{19}$ rescues vs.\ $b_{10}{=}\textbf{13}$ breaks,
 bootstrap $95\%$ CI $[-0.033,+0.113]$, $N{=}150$). At this pilot scale
 the effect is not statistically resolvable, and we report it as such: a
 $2$k-step, $10^{6}$-parameter head adapter already matches the best
-deployable test-time arm of Table~1 while leaving the entire training
+deployable test-time arm of Table~\ref{tab:sweep} while leaving the entire training
 recipe untouched, which is consistent with---but does not yet
 prove---the diagnosis that the remaining headroom is on the training
 side.
@@ -187,10 +225,12 @@ frozen clean-trained agent.
 We release: (i) the corruption-augmented HM3D ObjectNav configuration files
 and a script that injects the structure-preserving corruptions into the
 Habitat RGB stream; (ii) the paired protocol scaffold (seed, episode list,
-deterministic ordering) for $N{=}300$ low-light~sev~$4$~seed~$0$; (iii) all
+deterministic ordering) for $N{=}300$ low-light severity~$4$~seed~$0$; (iii) all
 per-episode CSVs used in this paper (success, SPL, distance-to-goal, goal
-category); (iv) the per-arm monkey-patch sources for RES, M1g, OracleGate,
-REVOKE, CRV, MUAP, FUSE, and DXCV against InstructNav (frozen backbone);
+category); (iv) the per-arm monkey-patch sources against InstructNav
+(frozen backbone) for RES, R-Weight, OracleGate, REVOKE, NearVerify,
+ReObserve, FUSE, and DepthVeto (code names in the release:
+\texttt{M1g}, \texttt{CRV}, \texttt{MUAP}, \texttt{DXCV});
 (v) the blind reliability estimator $r$ with its calibration probe set;
 (vi) the figure-generation code (\texttt{make\_figures.py},
 \texttt{make\_more\_figures.py}) and bibliography. We will release a

@@ -400,7 +400,7 @@ def fig_forest():
     n300_rows = [
         ("RES",        "Appearance",        RUNS / "redesign_n300/n300_RES_low_light_s4_seed0.csv",   "300", FAM_APPEAR),
         ("OracleGate", "Appearance UB",     RUNS / "oracle/or_ORACLEGATE_low_light_s4_seed0.csv",     "300", FAM_ORACLE),
-        ("M1g",        "Where-to-go",       RUNS / "redesign_n300/n300_M1g_low_light_s4_seed0.csv",   "300", FAM_WHERE),
+        ("R-Weight",   "Where-to-go",       RUNS / "redesign_n300/n300_M1g_low_light_s4_seed0.csv",   "300", FAM_WHERE),
     ]
     n150_b_ref = RUNS / "maintable/mt_B0_low_light_s4_seed0.csv"
     n150_known = [
@@ -409,10 +409,10 @@ def fig_forest():
     unified = RUNS / "unified"
     n150_queue = [
         ("REVOKE",     "Commit timing",     unified / "u_REVOKE_low_light_s4_seed0_N150.csv", "150", FAM_TIMING),
-        ("CRV",        "Forced commit",     unified / "u_CRV_low_light_s4_seed0_N150.csv",    "150", FAM_TIMING),
-        ("MUAP",       "Temporal",          unified / "u_MUAP_low_light_s4_seed0_N150.csv",   "150", FAM_TEMP),
+        ("NearVerify", "Forced commit",     unified / "u_CRV_low_light_s4_seed0_N150.csv",    "150", FAM_TIMING),
+        ("ReObserve",  "Temporal",          unified / "u_MUAP_low_light_s4_seed0_N150.csv",   "150", FAM_TEMP),
         ("FUSE",       "Multi-view",        unified / "u_FUSE_low_light_s4_seed0_N150.csv",   "150", FAM_MULTI),
-        ("DXCV",       "Multimodal probe",  unified / "u_DXCV_low_light_s4_seed0_N150.csv",   "150", FAM_PROBE),
+        ("DepthVeto",  "Multimodal probe",  unified / "u_DXCV_low_light_s4_seed0_N150.csv",   "150", FAM_PROBE),
     ]
 
     # compute paired stats (or TBD)
@@ -720,7 +720,7 @@ def fig_roadmap():
     box(38, 4, 60, 20,
         "Road 2  \u2014  a degradation-invariant sensing channel\n\n"
         "fuse RGB with depth / LiDAR under degraded RGB\n"
-        "(this paper: DXCV probe; remedies need learned fusion)",
+        "(this paper: DepthVeto probe; remedies need learned fusion)",
         T_POS, ec=C_POS, fs=7.5, fw="normal")
 
     plt.savefig(OUT / "fig_roadmap.pdf")

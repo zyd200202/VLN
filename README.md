@@ -23,7 +23,10 @@ paper/                  Overleaf-ready LaTeX source + compiled PDF
 └── README.md           Overleaf import instructions
 
 code/
+├── drphysnav/          blind reliability estimator + degradation suite source
 ├── instructnav_patch/  our modifications to InstructNav (Python only)
+│   ├── drphysnav_integration.pyc  reliability/degradation glue (bytecode;
+│   │                              original .py lost, decompiles cleanly)
 │   ├── objnav_benchmark.py    driver with paired protocol + DRPN_TRAJ_LOG
 │   ├── promptir_restore.py    PromptIR wrapper (RES arm)
 │   ├── render_topdown_rgb.py  bird's-eye scene renders for Figs. 6 & 9
@@ -42,12 +45,20 @@ code/
     └── fill_tables.py, fill_road1.py  autogen LaTeX tables from CSVs
 
 data/
-├── per_episode_csv/    every SR/SPL/DTG number behind Tables 1 & 2
-│   ├── maintable/, redesign_n300/, oracle/    N=300 main split
-│   ├── sweep_signmap/, unified/, crv/         N=150 sweep arms
-│   ├── traj_vignette/                         N=12 vignette runs
-│   └── road1_eval/                            Road-1 held-out eval
-├── motiv_jsonl/        step-level logs used by Figs. 2, 5, 7
+├── logs/               every SR/SPL/DTG number behind all tables & figures
+│   │                   (per-episode CSV + step-level *_motiv.jsonl together)
+│   ├── redesign_n300/, oracle/                N=300 main split (B0, RES,
+│   │                                          R-Weight, OracleGate, clean ceiling)
+│   ├── maintable/, unified/, crv/             N=150 sweep arms (REVOKE,
+│   │                                          NearVerify, ReObserve, FUSE,
+│   │                                          DepthVeto, ROUTER + B0 baseline)
+│   ├── qwen_cross{,_blur,_fog,_gauss}/        cross-corruption replication
+│   ├── sweep_signmap/                         N=40 sign-flip pilot
+│   ├── motivation_n90/                        n=90 M-study pool (seeds 0-2)
+│   │                                          + severity dose-response
+│   │                                          + M1 restoration arm
+│   ├── road1_eval/                            Road-1 held-out eval
+│   └── traj_vignette/                         12-episode vignette runs
 └── vignette/           12-episode trajectory bundle for Figs. 6 & 9
     ├── tv_{B0,RES,ORACLEGATE}_*_traj.jsonl    world+grid trajectories
     ├── tv_*_motiv.jsonl                       per-step reliability r
@@ -112,7 +123,7 @@ bash run_crv150_res.sh          # e.g. the RES paired baseline at N=150
 
 Paired McNemar exact tests on shared episodes; 95% bootstrap CIs with
 B=5000 over paired episode differences; α=0.05. Every ΔSR / p-value /
-CI in the paper is computed from `data/per_episode_csv/` by the scripts
+CI in the paper is computed from `data/logs/` by the scripts
 in `code/figures/` — nothing is hand-entered.
 
 ## Citation

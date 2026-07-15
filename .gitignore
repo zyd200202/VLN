@@ -33,3 +33,6 @@ tmp/
 
 # Explicit whitelist: keep the shipped adapter
 !checkpoints/adapter_low_light_s4.pth
+
+# Whitelist: reliability-integration bytecode (source recovered separately)
+!code/instructnav_patch/drphysnav_integration.pyc
